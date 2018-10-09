@@ -1,0 +1,275 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: 'backend-api'
+  description: 'The temporary recruitment agency called XXX wants to optimize the way they assign their workers to the different shifts of the jobs they work with. In order to help them with this mission, this API endpoint will return the best pairing options for matching shifts and workers.Also, it provides CRUD operations for each entity.'
+host: localhost:3000
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+tags:
+  - name: "workers"
+    description: "Manage your workers"
+  - name: "shifts"
+    description: "Manage your shifts"
+  - name: "matching"
+    description: "Get results of matching workers and shifts"
+paths:
+  '/workers':
+    get:
+      tags:
+      - "workers"
+      summary: 'Get all workers'
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            title: 'Response'
+            type: array
+            items:
+              $ref: '#/components/worker'
+        '500':
+          description: 'Internal server error'
+    post:
+      tags:
+      - "workers"
+      summary: 'Add new worker'
+      parameters:
+        - in: 'body'
+          name: 'payload'
+          description: 'Worker to add'
+          required: true
+          schema:
+            $ref: '#/components/worker'
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            $ref: '#/components/worker'
+        '400':
+          description: 'Bad request'
+        '500':
+          description: 'Internal server error'
+  '/workers/{id}':
+    get:
+      tags:
+      - "workers"
+      summary: 'Get specific worker'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the worker to get'
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'success'
+          schema: 
+            $ref: '#/components/worker'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+    put:
+      tags:
+      - "workers"
+      summary: 'Update specific worker'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the worker to update'
+          type: number
+          required: true
+        - in: 'body'
+          name: 'payload'
+          description: 'Worker to add'
+          required: true
+          schema:
+            $ref: '#/components/worker'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: "Bad request"
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+    delete:
+      tags:
+      - "workers"
+      summary: 'Delete specific worker'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the worker to delete'
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+  '/shifts':
+    get:
+      tags:
+      - "shifts"
+      summary: 'Get all shifts'
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            title: 'Response'
+            type: array
+            items:
+              $ref: '#/components/shift'
+        '500':
+          description: 'Internal server error'
+    post:
+      tags:
+      - "shifts"
+      summary: 'Add new shift'
+      parameters:
+        - in: 'body'
+          name: 'payload'
+          description: 'Shift to add'
+          required: true
+          schema:
+            $ref: '#/components/shift'
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            $ref: '#/components/shift'
+        '400':
+          description: 'Bad request'
+        '500':
+          description: 'Internal server error'
+  '/shifts/{id}':
+    get:
+      tags:
+      - "shifts"
+      summary: 'Get specific shift'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the shift to get'
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            $ref: '#/components/shift'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+    put:
+      tags:
+      - "shifts"
+      summary: 'Update specific shift'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the shift to update'
+          type: number
+          required: true
+        - in: 'body'
+          name: 'payload'
+          description: 'Shift to update'
+          required: true
+          schema:
+            $ref: '#/components/shift'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad request'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+    delete:
+      tags:
+      - "shifts"
+      summary: 'Delete specific shift'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'Numeric ID of the shift to delete'
+          type: number
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Internal server error'
+  '/matching':
+    get:
+      tags:
+      - "matching"
+      summary: 'Get matching between workers and shifts'
+      responses:
+        '200':
+          description: 'Success'
+          schema: 
+            $ref: '#/components/mappings'
+        '400':
+          description: 'Bad request'
+        '500':
+          description: 'Internal server error'
+components:
+  worker:
+    type: object
+    properties:
+      id:
+        type: number
+      availability:
+        type: array
+        items:
+          type: string
+          enum: [Monday, Tuesday, Wednesday, Thursday, Friday]
+      payrate:
+        type: number
+  shift:
+    type: object
+    properties:
+      id:
+        type: number
+      day:
+        type: string
+        enum: [Monday, Tuesday, Wednesday, Thursday, Friday]
+  matching:
+    type: object
+    properties:
+      workers:
+        type: array
+        items:
+          $ref: '#/components/worker'
+      shifts:
+        type: array
+        items:
+          $ref: '#/components/shift'
+  mappings:
+    type: object
+    properties:
+      mappings:
+        type: array
+        items:
+          type: object
+          properties:
+            shiftId:
+              type: number
+            workerId:
+              type: number
+      totalCost:
+        type: number

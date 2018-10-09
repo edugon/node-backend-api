@@ -1,0 +1,24 @@
+version: "2"
+
+services:
+
+  mongo:
+    container_name: mongo
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile
+    volumes: 
+      - "./mongo/data:/data/db"
+    ports:
+      - "27017:27017"
+  backend-api:
+    container_name: backend-api
+    build:
+      context: ./backend-api
+      dockerfile: Dockerfile
+    ports:
+     - "3000:3000"
+    depends_on: 
+      - mongo
+    links:
+      - mongo

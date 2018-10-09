@@ -1,0 +1,14 @@
+{
+	"scripts": {
+    	"start": "node app.js"
+	},
+	"name": "backend-api",
+	"version": "1.0.0",
+	"dependencies": {
+		"mongoose": "latest",
+		"mongoose-easy-auto-increment": "latest",
+		"express": "latest",
+		"method-override": "latest",
+		"body-parser": "latest"
+ 	}
+}
