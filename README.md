@@ -1,4 +1,3 @@
-
 # backend-api
 This document describes the deployment, functioning and testing of this backend API.
 
@@ -39,8 +38,6 @@ If you see that, we are going fine. Now you can use your favourite REST client t
 
 ### Resources naming
 This repository includes a [Swagger](https://swagger.io) file named **`/backend-api-swagger.yml`**, please refer to [Swagger Editor](https://editor.swagger.io/) for a more detailed description of resources and requests specifications :)
-
-> **Note:** **Try it out** operation is not tested!
 
 #### Workers API
 Get a list with all workers:
