@@ -52,13 +52,23 @@ Add a new worker:
 ``` bash
 POST /api/workers
 Content-Type: application/json
-Request Body: { specified within swagger definition }
+Request Body: 
+{
+  "id": 0,
+  "availability": ["Monday", ...],
+  "payrate": 0
+}
 ```
 Update a specific worker:
 ``` bash
 PUT /api/workers/:id
 Content-Type: application/json
-Request Body: { specified within swagger definition }
+Request Body:
+{
+  "id": 0,
+  "availability": ["Monday", ...],
+  "payrate": 0
+}
 ```
 Delete a specific worker:
 ``` bash
@@ -77,13 +87,21 @@ Add a new shift:
 ``` bash
 POST /api/shifts
 Content-Type: application/json
-Request Body: { specified within swagger definition }
+Request Body:
+{
+  "id": 0,
+  "day": "Monday"
+}
 ```
 Update a specific shift:
 ``` bash
 PUT /api/shifts/:id
 Content-Type: application/json
-Request Body: { specified within swagger definition }
+Request Body:
+{
+  "id": 0,
+  "day": "Monday"
+}
 ```
 Delete a specific shift:
 ``` bash
