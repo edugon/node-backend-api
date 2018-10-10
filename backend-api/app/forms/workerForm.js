@@ -19,7 +19,6 @@ function isDayDuplicated(availability) {
 	// we assume availability is not empty
 	availability.forEach(function(dayToCheck, index) {
 		let duplicated = 0;
-		console.log('iteration');
 		availability.forEach(function(day) {
 			if(day === dayToCheck) {
 				duplicated++;
