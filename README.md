@@ -8,7 +8,7 @@ This document describes the deployment, functioning and testing of this backend 
 4. **`/mongo/`** -> MongoDB configuration (the volume data will be persisted here).
 5. **`/README.md`** -> This README file :)
 
-### Description
+### About
 The temporary recruitment agency called **XXX** wants to optimize the way they assign their workers to the different shifts of the jobs they work with. In order to help them with this mission, this API endpoint will return the best pairing options for matching shifts and workers.
 
 Also, it provides CRUD operations for each entity.
