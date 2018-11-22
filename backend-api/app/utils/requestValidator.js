@@ -17,8 +17,10 @@ exports.validateRequest = function(req, next) {
 exports.validateKeys = function(keys, knownKeys, next) {
 	// we assume known keys are all required if exist
 	let unknown = false;
-		knownKeysLength = knownKeys.length - 2; // _id and __v are Mongo related keys
-	if(keys.length <= knownKeysLength) { 
+	// _id and __v are Mongo related keys:
+	knownKeys.splice(knownKeys.indexOf('_id'), 1);
+	knownKeys.splice(knownKeys.indexOf('__v'), 1);
+	if(keys.length <= knownKeys.length) { 
 		keys.forEach(function(key, index) {
 			if(knownKeys.indexOf(key) === -1) { // unknown key
 				unknown = true;
