@@ -51,10 +51,10 @@ exports.match = async function(req, res, next) {
 			});
 			res.status(200).jsonp({ mappings: mappings, totalCost: totalCost });
 		} else {
-			res.status(500).jsonp({ message: 'found no workers' });
+			errorHandler.fireError('NotFoundError', 'found no workers', next);
 		}
 	} else {
-		res.status(500).jsonp({ message: 'found no shifts' });
+		errorHandler.fireError('NotFoundError', 'found no shifts', next);
 	}
 	console.log('... done');
 }
