@@ -40,75 +40,22 @@ If you see that, we are going fine. Now you can use your favourite REST client t
 This repository includes a [Swagger](https://swagger.io) file named **`/backend-api-swagger.yml`**, please refer to [Swagger Editor](https://editor.swagger.io/) for a more detailed description of resources and requests specifications :)
 
 #### Workers API
-Get a list with all workers:
-``` bash
-GET /api/workers
-```
-Get information about a specific worker:
-``` bash
-GET /api/workers/:id
-```
-Add a new worker:
-``` bash
-POST /api/workers
-Content-Type: application/json
-Request Body: 
-{
-  "id": 0,
-  "availability": ["Monday", ...],
-  "payrate": 0
-}
-```
-Update a specific worker:
-``` bash
-PUT /api/workers/:id
-Content-Type: application/json
-Request Body:
-{
-  "id": 0,
-  "availability": ["Monday", ...],
-  "payrate": 0
-}
-```
-Delete a specific worker:
-``` bash
-DELETE /api/workers/:id
-```
+| Method | URL              | Description                 |
+|--------|------------------|-----------------------------|
+| GET    | /api/workers     | Get a list with all workers |
+| GET    | /api/workers/:id | Get a specific worker       |
+| POST   | /api/workers     | Add a new worker            |
+| PUT    | /api/workers/:id | Update a specific worker    |
+| DELETE | /api/workers/:id | Delete a specific worker    |
 #### Shifts API
-Get a list with all shifts:
-``` bash
-GET /api/shifts
-```
-Get information about a specific shift:
-``` bash
-GET /api/shifts/:id
-```
-Add a new shift:
-``` bash
-POST /api/shifts
-Content-Type: application/json
-Request Body:
-{
-  "id": 0,
-  "day": "Monday"
-}
-```
-Update a specific shift:
-``` bash
-PUT /api/shifts/:id
-Content-Type: application/json
-Request Body:
-{
-  "id": 0,
-  "day": "Monday"
-}
-```
-Delete a specific shift:
-``` bash
-DELETE /api/shifts/:id
-```
+| Method | URL              | Description                |
+|--------|------------------|----------------------------|
+| GET    | /api/shifts      | Get a list with all shifts |
+| GET    | /api/shifts/:id  | Get a specific shift       |
+| POST   | /api/shifts      | Add a new shift            |
+| PUT    | /api/shifts/:id  | Update a specific shift    |
+| DELETE | /api/shifts/:id  | Delete a specific shift    |
 #### Matching API
-Get a list with results of matching workers and shifts:
-``` bash
-GET /api/matching
-```
+| Method | URL              | Description                                            |
+|--------|------------------|--------------------------------------------------------|
+| GET    | /api/matching    | Get a list with results of matching workers and shifts |
