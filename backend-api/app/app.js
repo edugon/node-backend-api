@@ -7,6 +7,7 @@ var express = require('express'),
     dbConnection = require('./utils/dbConnection'),
     errorHandler = require('./utils/errorHandler'),
     mainRouter = require('./routes/mainRouter'),
+    userRouter = require('./routes/userRouter'),
     workerRouter = require('./routes/workerRouter'),
     shiftRouter = require('./routes/shiftRouter'),
     matchingRouter = require('./routes/matchingRouter');
@@ -17,6 +18,7 @@ app.use(methodOverride());
 
 // set routes and custom error handling
 app.use('/', mainRouter);
+app.use('/api/users', userRouter);
 app.use('/api/workers', workerRouter);
 app.use('/api/shifts', shiftRouter);
 app.use('/api/matching', matchingRouter);

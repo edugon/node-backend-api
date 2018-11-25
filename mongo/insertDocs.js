@@ -1,3 +1,8 @@
+// insert some users
+db.users.insert({id: 1, name: "admin", password: "Admin", email: "admin@backend"});
+db.users.insert({id: 2, name: "batman", password: "Batman", email: "batman@backend"});
+db.users.insert({id: 3, name: "spiderman", password: "Spiderman", email: "spiderman@backend"});
+
 // insert some workers
 db.workers.insert({id: 1, availability: ["Monday", "Wednesday", "Friday"], payrate: 7.50});
 db.workers.insert({id: 2, availability: ["Tuesday", "Thursday"], payrate: 9.00});
