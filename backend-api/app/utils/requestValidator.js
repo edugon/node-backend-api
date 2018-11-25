@@ -27,10 +27,10 @@ exports.validateKeys = function(keys, knownKeys, next) {
 			}
 		});
 		if(unknown) {
-			errorHandler.fireError('BadRequest', 'unknown parameters', next);
+			errorHandler.fireError('BadRequest', 'some parameters are unknown', next);
 		}
 	} else {
-		errorHandler.fireError('BadRequest', 'parameters exceeded', next);
+		errorHandler.fireError('BadRequest', 'parameters amount exceeded', next);
 	}
 	return true;
 }
