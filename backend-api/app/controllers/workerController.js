@@ -1,16 +1,16 @@
-var mongoose = require('mongoose'), 
+var mongoose = require('mongoose'),
 	errorHandler = require('../utils/errorHandler'),
 	Worker = require('../models/worker'),
 	workerForm = require('../forms/workerForm');
 
 // returns all workers in the collection
-exports.findAllWorkers = function(req, res, next) {
+exports.findAllWorkers = function (req, res, next) {
 	console.log('GET /workers');
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
-	Worker.find({}, '-_id id availability payrate shifts', function(err, workers) {
-	    if(err) {
-	    	setImmediate(function() { next(err); });
+	Worker.find({}, '-_id id availability payrate shifts', function (err, workers) {
+		if (err) {
+			setImmediate(function () { next(err); });
 		} else {
 			res.status(200).json(workers);
 			console.log('... done');
@@ -19,48 +19,48 @@ exports.findAllWorkers = function(req, res, next) {
 };
 
 // returns a specific worker located by id
-exports.findWorker = function(req, res, next) {
+exports.findWorker = function (req, res, next) {
 	console.log('GET /workers/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
-	Worker.findOne({ id: req.params.id } , '-_id id availability payrate shifts', 
-		function(err, worker) {
-		if(err) {
-			setImmediate(function() { next(err); });
-		} else {
-			if(!worker) {
-				errorHandler.fireError('NotFoundError', 'worker not found', next);
+	Worker.findOne({ id: req.params.id }, '-_id id availability payrate shifts',
+		function (err, worker) {
+			if (err) {
+				setImmediate(function () { next(err); });
 			} else {
-				res.status(200).json(worker);
-				console.log('... done');
+				if (!worker) {
+					errorHandler.fireError('NotFoundError', 'worker not found', next);
+				} else {
+					res.status(200).json(worker);
+					console.log('... done');
+				}
 			}
-		}
-	});
+		});
 };
 
 // adds a new worker to the collection
-exports.addWorker = function(req, res, next) {
+exports.addWorker = function (req, res, next) {
 	console.log('POST /workers');
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if(workerForm.validate(req, next)) {
+	if (workerForm.validate(req, next)) {
 		let worker = new Worker({
-			id: 		  req.body.id,
-	    	availability: req.body.availability,
-	    	payrate: 	  req.body.payrate
+			id: req.body.id,
+			availability: req.body.availability,
+			payrate: req.body.payrate
 		});
 		worker.validate(function (err) {
-  			if(err) {
-  				setImmediate(function() { next(err); });
-  			} else {
-				worker.save(function(err) {
-					if(err) {
-						setImmediate(function() { next(err); });
+			if (err) {
+				setImmediate(function () { next(err); });
+			} else {
+				worker.save(function (err) {
+					if (err) {
+						setImmediate(function () { next(err); });
 					} else {
-				      	res.status(200).json(worker);
-				      	console.log('... done');
-					} 
+						res.status(200).json(worker);
+						console.log('... done');
+					}
 				});
 			}
 		});
@@ -68,27 +68,27 @@ exports.addWorker = function(req, res, next) {
 };
 
 // updates a specific worker located by id
-exports.updateWorker = function(req, res, next) {
+exports.updateWorker = function (req, res, next) {
 	console.log('PUT /workers/' + req.params.id);
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if(workerForm.validate(req, next)) {
+	if (workerForm.validate(req, next)) {
 		let worker = new Worker(req.body);
 		worker.validate(function (err) {
-			if(err) {
-  				setImmediate(function() { next(err); });
-  			} else {
-				Worker.updateOne({ id: req.params.id }, req.body, function(err, result) {
-					if(err) {
-						setImmediate(function() { next(err); });
+			if (err) {
+				setImmediate(function () { next(err); });
+			} else {
+				Worker.updateOne({ id: req.params.id }, req.body, function (err, result) {
+					if (err) {
+						setImmediate(function () { next(err); });
 					} else {
-						if(result.n === 0) {
+						if (result.n === 0) {
 							errorHandler.fireError('NotFoundError', 'worker not found', next);
 						} else {
 							res.status(200);
 							res.json({ message: 'done' });
-					    	console.log('... done');
+							console.log('... done');
 						}
 					}
 				});
@@ -98,19 +98,19 @@ exports.updateWorker = function(req, res, next) {
 }
 
 // deletes a specific worker located by id
-exports.deleteWorker = function(req, res, next) {
+exports.deleteWorker = function (req, res, next) {
 	console.log('DELETE /workers/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
-	Worker.deleteOne({ id: req.params.id }, function(err, result) {
-		if(err) {
-			setImmediate(function() { next(err); });
+	Worker.deleteOne({ id: req.params.id }, function (err, result) {
+		if (err) {
+			setImmediate(function () { next(err); });
 		} else {
-			if(result.n === 0) {
+			if (result.n === 0) {
 				errorHandler.fireError('NotFoundError', 'worker not found', next);
 			} else {
 				res.status(200);
 				res.json({ message: 'done' });
-		    	console.log('... done');
+				console.log('... done');
 			}
 		}
 	});

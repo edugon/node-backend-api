@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'), 
+var mongoose = require('mongoose'),
 	errorHandler = require('../utils/errorHandler'),
 	Worker = require('../models/worker.js'),
 	Shift = require('../models/shift.js'),
@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
 // returns the workers that match the input day
 function matchWorkers(day, workers) {
 	let matchedWorkers = [];
-	workers.forEach(function(worker) {
-		if(worker.availability.indexOf(day) > -1) {
+	workers.forEach(function (worker) {
+		if (worker.availability.indexOf(day) > -1) {
 			matchedWorkers.push(worker);
 		}
 	});
@@ -18,11 +18,11 @@ function matchWorkers(day, workers) {
 // returns the worker with the lowest payrate
 function getCheaperWorker(workers) {
 	let cheaperWorker = null;
-	workers.forEach(function(worker) {
-		if(!cheaperWorker) {
+	workers.forEach(function (worker) {
+		if (!cheaperWorker) {
 			cheaperWorker = worker; // set first iteration
 		} else {
-			if(cheaperWorker.payrate > worker.payrate) {
+			if (cheaperWorker.payrate > worker.payrate) {
 				cheaperWorker = worker;
 			}
 		}
@@ -31,16 +31,16 @@ function getCheaperWorker(workers) {
 }
 
 // matches shifts and workers depending on shift.day and worker.payrate
-exports.match = async function(req, res, next) {
+exports.match = async function (req, res, next) {
 	console.log('GET /matching');
 	let shifts = await Shift.find({}),
 		workers = await Worker.find({}), // the simpler the better :)
 		mappings = [],
 		totalCost = 0;
-	
-	if(shifts) {
-		if(workers) {
-			shifts.forEach(function(shift) {
+
+	if (shifts) {
+		if (workers) {
+			shifts.forEach(function (shift) {
 				let matchedWorkers = matchWorkers(shift.day, workers),
 					cheaperWorker = getCheaperWorker(matchedWorkers),
 					workerIndex = workers.indexOf(cheaperWorker);

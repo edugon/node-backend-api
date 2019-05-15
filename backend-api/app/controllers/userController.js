@@ -1,16 +1,16 @@
-var mongoose = require('mongoose'), 
+var mongoose = require('mongoose'),
 	errorHandler = require('../utils/errorHandler'),
 	User = require('../models/user'),
 	userForm = require('../forms/userForm');
 
 // returns all users in the collection
-exports.findAllUsers = function(req, res, next) {
+exports.findAllUsers = function (req, res, next) {
 	console.log('GET /users');
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
-	User.find({}, '-_id id name email', function(err, users) {
-	    if(err) {
-	    	setImmediate(function() { next(err); });
+	User.find({}, '-_id id name email', function (err, users) {
+		if (err) {
+			setImmediate(function () { next(err); });
 		} else {
 			res.status(200).json(users);
 			console.log('... done');
@@ -19,15 +19,15 @@ exports.findAllUsers = function(req, res, next) {
 };
 
 // returns a specific user located by id
-exports.findUser = function(req, res, next) {
+exports.findUser = function (req, res, next) {
 	console.log('GET /users/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
-	User.findOne({ id: req.params.id }, '-_id id name email', function(err, user) {
-	    if(err) {
-	    	setImmediate(function() { next(err); });
+	User.findOne({ id: req.params.id }, '-_id id name email', function (err, user) {
+		if (err) {
+			setImmediate(function () { next(err); });
 		} else {
-			if(!user) {
+			if (!user) {
 				errorHandler.fireError('NotFoundError', 'user not found', next);
 			} else {
 				res.status(200).json(user);
@@ -38,52 +38,52 @@ exports.findUser = function(req, res, next) {
 };
 
 // adds a new user to the collection
-exports.addUser = function(req, res, next) {
+exports.addUser = function (req, res, next) {
 	console.log('POST /users');
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if(userForm.validate(req, next)) {
+	if (userForm.validate(req, next)) {
 		let user = new User(req.body);
 		user.validate(function (err) {
-  			if(err) {
-  				setImmediate(function() { next(err); });
-  			} else {
-  				user.save(function(err) {
-					if(err) {
-						setImmediate(function() { next(err); });
+			if (err) {
+				setImmediate(function () { next(err); });
+			} else {
+				user.save(function (err) {
+					if (err) {
+						setImmediate(function () { next(err); });
 					} else {
-				    	res.status(200).json(user);
-				    	console.log('... done');
+						res.status(200).json(user);
+						console.log('... done');
 					}
 				});
-  			}
+			}
 		});
 	}
 };
 
 // updates a specific user located by id
-exports.updateUser= function(req, res, next) {
+exports.updateUser = function (req, res, next) {
 	console.log('PUT /users/' + req.params.id);
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if(userForm.validate(req, next)) {
+	if (userForm.validate(req, next)) {
 		let user = new User(req.body);
 		user.validate(function (err) {
-			if(err) {
-  				setImmediate(function() { next(err); });
-  			} else {
-				User.updateOne({ id: req.params.id }, req.body, function(err, result) {
-					if(err) {
-						setImmediate(function() { next(err); });
+			if (err) {
+				setImmediate(function () { next(err); });
+			} else {
+				User.updateOne({ id: req.params.id }, req.body, function (err, result) {
+					if (err) {
+						setImmediate(function () { next(err); });
 					} else {
-						if(result.n === 0) {
+						if (result.n === 0) {
 							errorHandler.fireError('NotFoundError', 'user not found', next);
 						} else {
 							res.status(200);
 							res.json({ message: 'done' });
-					    	console.log('... done');
+							console.log('... done');
 						}
 					}
 				});
@@ -93,19 +93,19 @@ exports.updateUser= function(req, res, next) {
 }
 
 // deletes a specific user located by id
-exports.deleteUser = function(req, res, next) {
+exports.deleteUser = function (req, res, next) {
 	console.log('DELETE /users/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
-	User.deleteOne({ id: req.params.id }, function(err, result) {
-		if(err) {
-			setImmediate(function() { next(err); });
+	User.deleteOne({ id: req.params.id }, function (err, result) {
+		if (err) {
+			setImmediate(function () { next(err); });
 		} else {
-			if(result.n === 0) {
+			if (result.n === 0) {
 				errorHandler.fireError('NotFoundError', 'user not found', next);
 			} else {
 				res.status(200);
 				res.json({ message: 'done' });
-		    	console.log('... done');
+				console.log('... done');
 			}
 		}
 	});

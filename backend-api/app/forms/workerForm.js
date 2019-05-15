@@ -17,32 +17,32 @@ var requestValidator = require('../utils/requestValidator'),
 function isDayDuplicated(availability) {
 	let isDuplicated = false;
 	// we assume availability is not empty
-	availability.forEach(function(dayToCheck, index) {
+	availability.forEach(function (dayToCheck, index) {
 		let duplicated = 0;
-		availability.forEach(function(day) {
-			if(day === dayToCheck) {
+		availability.forEach(function (day) {
+			if (day === dayToCheck) {
 				duplicated++;
 			}
 		});
 		// we already expect it contains itself :)
-		if(duplicated > 1) {
+		if (duplicated > 1) {
 			isDuplicated = true;
 		}
 	});
 	return isDuplicated;
 }
 
-exports.validate = function(req, next) {
+exports.validate = function (req, next) {
 	// first validate common forms
-	if(!requestValidator.validateRequest(req, next)) {
+	if (!requestValidator.validateRequest(req, next)) {
 		return false;
 	} else {
 		let keys = Object.keys(req.body),
 			workerKeys = Object.keys(workerSchema.paths);
-		if(!requestValidator.validateKeys(keys, workerKeys, next)) {
+		if (!requestValidator.validateKeys(keys, workerKeys, next)) {
 			return false;
-		// if undefined continue to schema validation
-		} else if(req.body.availability && isDayDuplicated(req.body.availability)) {
+			// if undefined continue to schema validation
+		} else if (req.body.availability && isDayDuplicated(req.body.availability)) {
 			errorHandler.fireError('BadRequest', 'days should not be duplicated', next);
 			return false;
 		}

@@ -3,10 +3,10 @@ var express = require('express'),
 
 // just a middleware saying hi :)
 
-mainRouter.get('/', function(req, res) {
+mainRouter.get('/', function (req, res) {
 	console.log('GET /');
-  	res.send('backend-api is listening at http://localhost:3000/api/');
-  	console.log('... done');
+	res.send('backend-api is listening at http://localhost:3000/api/');
+	console.log('... done');
 });
 
 module.exports = mainRouter;

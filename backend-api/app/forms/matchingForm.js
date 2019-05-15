@@ -9,9 +9,9 @@ var requestValidator = require('../utils/requestValidator'),
  *		2. Any other specific criteria.
  */
 
-exports.validate = function(req, next) {
+exports.validate = function (req, next) {
 	// first validate common forms
-	if(!requestValidator.validateRequest(req, next)) {
+	if (!requestValidator.validateRequest(req, next)) {
 		return false;
 	} else {
 		// validate specific forms
