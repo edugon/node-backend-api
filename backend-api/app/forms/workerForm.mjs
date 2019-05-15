@@ -1,7 +1,8 @@
-var requestValidator = require('../utils/requestValidator'),
-	errorHandler = require('../utils/errorHandler'),
-	Shift = require('../models/shift'),
-	workerSchema = require('mongoose').model('Worker').schema;
+import mongoose from 'mongoose';
+import { validateRequest, validateKeys } from '../utils/requestValidator';
+import { fireError } from '../utils/errorHandler';
+import { ERROR } from '../utils/constants';
+import worker from '../models/worker';
 
 /* 
  * Here the validation procedure for workers, triggered by controller (if needed).
@@ -17,33 +18,33 @@ var requestValidator = require('../utils/requestValidator'),
 function isDayDuplicated(availability) {
 	let isDuplicated = false;
 	// we assume availability is not empty
-	availability.forEach(function(dayToCheck, index) {
+	availability.forEach(function (dayToCheck, index) {
 		let duplicated = 0;
-		availability.forEach(function(day) {
-			if(day === dayToCheck) {
+		availability.forEach(function (day) {
+			if (day === dayToCheck) {
 				duplicated++;
 			}
 		});
 		// we already expect it contains itself :)
-		if(duplicated > 1) {
+		if (duplicated > 1) {
 			isDuplicated = true;
 		}
 	});
 	return isDuplicated;
 }
 
-exports.validate = function(req, next) {
+export function validate (req, next) {
 	// first validate common forms
-	if(!requestValidator.validateRequest(req, next)) {
+	if (!validateRequest(req, next)) {
 		return false;
 	} else {
 		let keys = Object.keys(req.body),
-			workerKeys = Object.keys(workerSchema.paths);
-		if(!requestValidator.validateKeys(keys, workerKeys, next)) {
+			workerKeys = Object.keys(worker.schema.paths);
+		if (!validateKeys(keys, workerKeys, next)) {
 			return false;
-		// if undefined continue to schema validation
-		} else if(req.body.availability && isDayDuplicated(req.body.availability)) {
-			errorHandler.fireError('BadRequest', 'days should not be duplicated', next);
+			// if undefined continue to schema validation
+		} else if (req.body.availability && isDayDuplicated(req.body.availability)) {
+			fireError(ERROR.bad_request, 'days should not be duplicated', next);
 			return false;
 		}
 		// ... more validation of specific forms

@@ -1,14 +1,13 @@
-var mongoose = require('mongoose'), 
-	errorHandler = require('../utils/errorHandler'),
-	Worker = require('../models/worker.js'),
-	Shift = require('../models/shift.js'),
-	matchingForm = require('../forms/matchingForm');
+import { fireError } from '../utils/errorHandler';
+import { HTTP_CODE, ERROR } from '../utils/constants';
+import Worker from '../models/worker';
+import Shift from '../models/shift';
 
 // returns the workers that match the input day
 function matchWorkers(day, workers) {
 	let matchedWorkers = [];
-	workers.forEach(function(worker) {
-		if(worker.availability.indexOf(day) > -1) {
+	workers.forEach(function (worker) {
+		if (worker.availability.indexOf(day) > -1) {
 			matchedWorkers.push(worker);
 		}
 	});
@@ -18,11 +17,11 @@ function matchWorkers(day, workers) {
 // returns the worker with the lowest payrate
 function getCheaperWorker(workers) {
 	let cheaperWorker = null;
-	workers.forEach(function(worker) {
-		if(!cheaperWorker) {
+	workers.forEach(function (worker) {
+		if (!cheaperWorker) {
 			cheaperWorker = worker; // set first iteration
 		} else {
-			if(cheaperWorker.payrate > worker.payrate) {
+			if (cheaperWorker.payrate > worker.payrate) {
 				cheaperWorker = worker;
 			}
 		}
@@ -31,16 +30,16 @@ function getCheaperWorker(workers) {
 }
 
 // matches shifts and workers depending on shift.day and worker.payrate
-exports.match = async function(req, res, next) {
+export async function match (req, res, next) {
 	console.log('GET /matching');
 	let shifts = await Shift.find({}),
 		workers = await Worker.find({}), // the simpler the better :)
 		mappings = [],
 		totalCost = 0;
-	
-	if(shifts) {
-		if(workers) {
-			shifts.forEach(function(shift) {
+
+	if (shifts) {
+		if (workers) {
+			shifts.forEach(function (shift) {
 				let matchedWorkers = matchWorkers(shift.day, workers),
 					cheaperWorker = getCheaperWorker(matchedWorkers),
 					workerIndex = workers.indexOf(cheaperWorker);
@@ -49,12 +48,11 @@ exports.match = async function(req, res, next) {
 				// we are not persisting the matching
 				workers[workerIndex].availability.splice(shift.day, 1);
 			});
-			res.status(200).jsonp({ mappings: mappings, totalCost: totalCost });
+			res.status(HTTP_CODE.success).jsonp({ mappings: mappings, totalCost: totalCost });
 		} else {
-			errorHandler.fireError('NotFoundError', 'found no workers', next);
+			fireError(ERROR.not_found, 'found no workers', next);
 		}
 	} else {
-		errorHandler.fireError('NotFoundError', 'found no shifts', next);
+		fireError(ERROR.not_found, 'found no shifts', next);
 	}
-	console.log('... done');
 }
