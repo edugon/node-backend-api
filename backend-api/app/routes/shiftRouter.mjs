@@ -1,6 +1,7 @@
-var express = require('express'),
-	shiftController = require('../controllers/shiftController'),
-	shiftRouter = express.Router();
+import express from 'express';
+import * as shiftController from '../controllers/shiftController';
+
+const shiftRouter = express.Router();
 
 // here shifts API endpoints are routed to controller middlewares
 
@@ -13,4 +14,4 @@ shiftRouter.route('/:id')
 	.put(shiftController.updateShift)
 	.delete(shiftController.deleteShift);
 
-module.exports = shiftRouter;
+export default shiftRouter;

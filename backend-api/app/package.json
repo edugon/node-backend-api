@@ -1,6 +1,6 @@
 {
 	"scripts": {
-    	"start": "node app.js"
+    	"start": "node --experimental-modules app.mjs"
 	},
 	"name": "backend-api",
 	"version": "1.0.0",
