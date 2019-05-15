@@ -1,6 +1,7 @@
-var express = require('express'),
-	workerController = require('../controllers/workerController'),
-	workerRouter = express.Router();
+import express from 'express';
+import * as workerController from '../controllers/workerController';
+
+const workerRouter = express.Router();
 
 // here workers API endpoints are routed to controller middlewares
 
@@ -13,4 +14,4 @@ workerRouter.route('/:id')
 	.put(workerController.updateWorker)
 	.delete(workerController.deleteWorker);
 
-module.exports = workerRouter;
+export default workerRouter;

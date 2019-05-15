@@ -1,8 +1,7 @@
-var mongoose = require('mongoose'),
-	errorHandler = require('../utils/errorHandler'),
-	Worker = require('../models/worker.js'),
-	Shift = require('../models/shift.js'),
-	matchingForm = require('../forms/matchingForm');
+import { fireError } from '../utils/errorHandler';
+import { HTTP_CODE, ERROR } from '../utils/constants';
+import Worker from '../models/worker';
+import Shift from '../models/shift';
 
 // returns the workers that match the input day
 function matchWorkers(day, workers) {
@@ -31,7 +30,7 @@ function getCheaperWorker(workers) {
 }
 
 // matches shifts and workers depending on shift.day and worker.payrate
-exports.match = async function (req, res, next) {
+export async function match (req, res, next) {
 	console.log('GET /matching');
 	let shifts = await Shift.find({}),
 		workers = await Worker.find({}), // the simpler the better :)
@@ -49,12 +48,11 @@ exports.match = async function (req, res, next) {
 				// we are not persisting the matching
 				workers[workerIndex].availability.splice(shift.day, 1);
 			});
-			res.status(200).jsonp({ mappings: mappings, totalCost: totalCost });
+			res.status(HTTP_CODE.success).jsonp({ mappings: mappings, totalCost: totalCost });
 		} else {
-			errorHandler.fireError('NotFoundError', 'found no workers', next);
+			fireError(ERROR.not_found, 'found no workers', next);
 		}
 	} else {
-		errorHandler.fireError('NotFoundError', 'found no shifts', next);
+		fireError(ERROR.not_found, 'found no shifts', next);
 	}
-	console.log('... done');
 }

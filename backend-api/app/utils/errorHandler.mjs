@@ -1,5 +1,7 @@
+import { MESSAGES, HTTP_CODE, ERROR } from './constants'
+
 // just some refactoring :)
-exports.fireError = function (errName, errMessage, next) {
+export function fireError (errName, errMessage, next) {
 	setImmediate(function () {
 		let customError = new Error(errMessage);
 		customError.name = errName;
@@ -8,7 +10,7 @@ exports.fireError = function (errName, errMessage, next) {
 }
 
 // custom middleware for Express error handling
-exports.handleError = function (err, req, res, next) {
+export function handleError (err, req, res, next) {
 	console.error(err.stack);
 	if (res.headersSent) {
 		// delegate to default error handler if headers already sent
@@ -19,26 +21,26 @@ exports.handleError = function (err, req, res, next) {
 		let errorCode = err.code;
 		switch (err.name) {
 			// custom errors
-			case 'BadRequest':
-				res.status(400);
+			case ERROR.bad_request:
+				res.status(HTTP_CODE.bad_request);
 				break;
-			case 'NotFoundError':
-				res.status(404);
+			case ERROR.not_found:
+				res.status(HTTP_CODE.not_found);
 				break;
 			// mongoose errors
-			case 'ValidationError':
-				res.status(400);
+			case ERROR.validation:
+				res.status(HTTP_CODE.bad_request);
 				break;
-			case 'MongoError':
+			case ERROR.mongo:
 				// check needed to avoid Mongo trace
 				if (err.code && err.code === 11000) {
-					err.message = "id already exists";
+					err.message = MESSAGES.id_exists;
 				} else {
-					err.message = 'Mongo error :(';
+					err.message = MESSAGES.mongo_error;
 				}
 				break;
 			default:
-				res.status(500);
+				res.status(HTTP_CODE.error);
 		}
 		res.json({ error: err.message });
 	}

@@ -1,6 +1,7 @@
-var express = require('express'),
-	userController = require('../controllers/userController'),
-	userRouter = express.Router();
+import express from 'express';
+import * as userController from '../controllers/userController';
+
+const userRouter = express.Router();
 
 // here users API endpoints are routed to controller middlewares
 
@@ -13,4 +14,4 @@ userRouter.route('/:id')
 	.put(userController.updateUser)
 	.delete(userController.deleteUser);
 
-module.exports = userRouter;
+export default userRouter;

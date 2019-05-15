@@ -1,7 +1,7 @@
-var requestValidator = require('../utils/requestValidator'),
-	errorHandler = require('../utils/errorHandler'),
-	Worker = require('../models/worker'),
-	shiftSchema = require('mongoose').model('Shift').schema;
+import mongoose from 'mongoose';
+import { ENTITY } from '../utils/constants';
+import { validateRequest, validateKeys } from '../utils/requestValidator';
+import shift from '../models/shift';
 
 /* 
  * Here the validation procedure for shifts, triggered by controller (if needed).
@@ -12,14 +12,14 @@ var requestValidator = require('../utils/requestValidator'),
  *		3. Any other specific criteria (e.g. check the worker exists if associated).
  */
 
-exports.validate = function (req, next) {
+export function validate (req, next) {
 	// first validate common forms
-	if (!requestValidator.validateRequest(req, next)) {
+	if (!validateRequest(req, next)) {
 		return false;
 	} else {
 		let keys = Object.keys(req.body),
-			shiftKeys = Object.keys(shiftSchema.paths);
-		if (!requestValidator.validateKeys(keys, shiftKeys, next)) {
+			shiftKeys = Object.keys(shift.schema.paths);
+		if (!validateKeys(keys, shiftKeys, next)) {
 			return false;
 		}
 		// ... more validation of specific forms

@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:8-stretch
 LABEL description="this image builds node backend-api"
 
 # use changes to package.json to force docker not to use the cache

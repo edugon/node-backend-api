@@ -1,10 +1,10 @@
-var mongoose = require('mongoose'),
-	errorHandler = require('../utils/errorHandler'),
-	User = require('../models/user'),
-	userForm = require('../forms/userForm');
+import { fireError } from '../utils/errorHandler';
+import { HTTP_CODE, ERROR } from '../utils/constants';
+import { validate } from '../forms/userForm';
+import User from '../models/user';
 
 // returns all users in the collection
-exports.findAllUsers = function (req, res, next) {
+export function findAllUsers (req, res, next) {
 	console.log('GET /users');
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
@@ -12,14 +12,13 @@ exports.findAllUsers = function (req, res, next) {
 		if (err) {
 			setImmediate(function () { next(err); });
 		} else {
-			res.status(200).json(users);
-			console.log('... done');
+			res.status(HTTP_CODE.success).json(users);
 		}
 	});
-};
+}
 
 // returns a specific user located by id
-exports.findUser = function (req, res, next) {
+export function findUser (req, res, next) {
 	console.log('GET /users/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
 	// internal _id must be specifically excluded
@@ -28,22 +27,21 @@ exports.findUser = function (req, res, next) {
 			setImmediate(function () { next(err); });
 		} else {
 			if (!user) {
-				errorHandler.fireError('NotFoundError', 'user not found', next);
+				fireError(ERROR.not_found, 'user not found', next);
 			} else {
-				res.status(200).json(user);
-				console.log('... done');
+				res.status(HTTP_CODE.success).json(user);
 			}
 		}
 	});
-};
+}
 
 // adds a new user to the collection
-exports.addUser = function (req, res, next) {
+export function addUser (req, res, next) {
 	console.log('POST /users');
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if (userForm.validate(req, next)) {
+	if (validate(req, next)) {
 		let user = new User(req.body);
 		user.validate(function (err) {
 			if (err) {
@@ -53,22 +51,21 @@ exports.addUser = function (req, res, next) {
 					if (err) {
 						setImmediate(function () { next(err); });
 					} else {
-						res.status(200).json(user);
-						console.log('... done');
+						res.status(HTTP_CODE.success).json(user);
 					}
 				});
 			}
 		});
 	}
-};
+}
 
 // updates a specific user located by id
-exports.updateUser = function (req, res, next) {
+export function updateUser (req, res, next) {
 	console.log('PUT /users/' + req.params.id);
 	console.log(JSON.stringify(req.body));
 	res.setHeader('content-type', 'application/json');
 	// first validate forms
-	if (userForm.validate(req, next)) {
+	if (validate(req, next)) {
 		let user = new User(req.body);
 		user.validate(function (err) {
 			if (err) {
@@ -79,11 +76,10 @@ exports.updateUser = function (req, res, next) {
 						setImmediate(function () { next(err); });
 					} else {
 						if (result.n === 0) {
-							errorHandler.fireError('NotFoundError', 'user not found', next);
+							fireError(ERROR.not_found, 'user not found', next);
 						} else {
-							res.status(200);
+							res.status(HTTP_CODE.success);
 							res.json({ message: 'done' });
-							console.log('... done');
 						}
 					}
 				});
@@ -93,7 +89,7 @@ exports.updateUser = function (req, res, next) {
 }
 
 // deletes a specific user located by id
-exports.deleteUser = function (req, res, next) {
+export function deleteUser (req, res, next) {
 	console.log('DELETE /users/' + req.params.id);
 	res.setHeader('content-type', 'application/json');
 	User.deleteOne({ id: req.params.id }, function (err, result) {
@@ -101,12 +97,11 @@ exports.deleteUser = function (req, res, next) {
 			setImmediate(function () { next(err); });
 		} else {
 			if (result.n === 0) {
-				errorHandler.fireError('NotFoundError', 'user not found', next);
+				fireError(ERROR.not_found, 'user not found', next);
 			} else {
-				res.status(200);
+				res.status(HTTP_CODE.success);
 				res.json({ message: 'done' });
-				console.log('... done');
 			}
 		}
 	});
-};
+}

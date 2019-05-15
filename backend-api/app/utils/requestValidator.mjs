@@ -1,20 +1,21 @@
-var errorHandler = require('./errorHandler');
+import { fireError } from './errorHandler';
+import { ERROR } from './constants';
 
 // validation of common POST/PUT requests stuff
-exports.validateRequest = function (req, next) {
+export function validateRequest (req, next) {
 	let contype = req.headers['content-type'];
 	if (!contype || contype.indexOf('application/json') !== 0) {
-		errorHandler.fireError('BadRequest', 'content-type should be application/json', next);
+		fireError(ERROR.bad_request, 'content-type should be application/json', next);
 		return false;
 	} else if (Array.isArray(req.body)) { // REST compliant :)
-		errorHandler.fireError('BadRequest', 'body should not be an array', next);
+		fireError(ERROR.bad_request, 'body should not be an array', next);
 		return false;
 	}
 	return true;
 }
 
 // validation of JSON keys
-exports.validateKeys = function (keys, knownKeys, next) {
+export function validateKeys (keys, knownKeys, next) {
 	// we assume known keys are all required if exist
 	let unknown = false;
 	// _id and __v are Mongo related keys:
@@ -27,10 +28,10 @@ exports.validateKeys = function (keys, knownKeys, next) {
 			}
 		});
 		if (unknown) {
-			errorHandler.fireError('BadRequest', 'some parameters are unknown', next);
+			fireError(ERROR.bad_request, 'some parameters are unknown', next);
 		}
 	} else {
-		errorHandler.fireError('BadRequest', 'parameters amount exceeded', next);
+		fireError(ERROR.bad_request, 'parameters amount exceeded', next);
 	}
 	return true;
 }

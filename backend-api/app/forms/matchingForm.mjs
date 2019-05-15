@@ -1,5 +1,4 @@
-var requestValidator = require('../utils/requestValidator'),
-	errorHandler = require('../utils/errorHandler');
+import { validateRequest } from '../utils/requestValidator';
 
 /* 
  * Here the validation procedure for matching, triggered by controller (if needed).
@@ -9,9 +8,9 @@ var requestValidator = require('../utils/requestValidator'),
  *		2. Any other specific criteria.
  */
 
-exports.validate = function (req, next) {
+export function validate (req, next) {
 	// first validate common forms
-	if (!requestValidator.validateRequest(req, next)) {
+	if (!validateRequest(req, next)) {
 		return false;
 	} else {
 		// validate specific forms

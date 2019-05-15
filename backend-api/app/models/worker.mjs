@@ -1,22 +1,23 @@
-var mongoose = require('mongoose'),
-	Schema = mongoose.Schema,
-	enums = require('../utils/enums');
+import mongoose from 'mongoose';
+import { DAYS, ENTITY, MESSAGES } from '../utils/constants';
+
+const Schema = mongoose.Schema;
 
 // min/max value checks are not meant for arrays, custom validation needed
-var availabilityValidators = [
-	{ validator: availabilityMin, msg: 'at least one day' },
-	{ validator: availabilityMax, msg: 'no more than a week' }
+const availabilityValidators = [
+	{ validator: availabilityMin, msg: MESSAGES.min_day },
+	{ validator: availabilityMax, msg: MESSAGES.max_week }
 ];
 
-var workerSchema = new Schema({
+const workerSchema = new Schema({
 	id: {
-		required: [true, 'this is required!'],
+		required: [true, MESSAGES.required_field],
 		unique: true,
 		type: Number,
 		min: 1
 	},
 	availability: {
-		required: [true, 'this is required!'],
+		required: [true, MESSAGES.required_field],
 		type: [{
 			type: String,
 			enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
@@ -24,7 +25,7 @@ var workerSchema = new Schema({
 		validate: availabilityValidators
 	},
 	payrate: {
-		required: [true, 'this is required!'],
+		required: [true, MESSAGES.required_field],
 		type: Number,
 		min: 0
 	}
@@ -40,7 +41,7 @@ function availabilityMax(availability) {
 
 // not working :(
 function dayEnum() {
-	return enums.days;
+	return DAYS;
 }
 
-module.exports = mongoose.model('Worker', workerSchema);
+export default mongoose.model(ENTITY.worker, workerSchema);

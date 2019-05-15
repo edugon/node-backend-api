@@ -1,6 +1,7 @@
-var requestValidator = require('../utils/requestValidator'),
-	errorHandler = require('../utils/errorHandler'),
-	userSchema = require('mongoose').model('User').schema;
+import mongoose from 'mongoose';
+import { ENTITY } from '../utils/constants';
+import { validateRequest, validateKeys } from '../utils/requestValidator';
+import user from '../models/user';
 
 /* 
  * Here the validation procedure for users, triggered by controller (if needed).
@@ -11,14 +12,14 @@ var requestValidator = require('../utils/requestValidator'),
  *		3. Any other specific criteria ...
  */
 
-exports.validate = function (req, next) {
+export function validate (req, next) {
 	// first validate common forms
-	if (!requestValidator.validateRequest(req, next)) {
+	if (!validateRequest(req, next)) {
 		return false;
 	} else {
 		let keys = Object.keys(req.body),
-			userKeys = Object.keys(userSchema.paths);
-		if (!requestValidator.validateKeys(keys, userKeys, next)) {
+			userKeys = Object.keys(user.schema.paths);
+		if (!validateKeys(keys, userKeys, next)) {
 			return false;
 		}
 		// ... more validation of specific forms
