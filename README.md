@@ -1,5 +1,6 @@
 # backend-api
 This document describes the deployment, functioning and testing of this backend API.
+> This is a migrated repository, the currently maintained version is located [here](https://gitlab.com/edugon/node-backend-api).
 
 ### Directory listing
 1. **`/backend-api/`** -> Sources folder.
